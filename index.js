@@ -45,7 +45,11 @@ class Liqui {
 		return rp(mergedOptions);
 	};
 
-	_query(method, params) {
+	_query(method, params, specificOptions) {
+
+		if (!specificOptions) {
+			var specificOptions = {};
+		}
 
 		if (!this.apiKey || !this.apiSecret) {
 			return Promise.reject('API Key and Secret are required for this call');
@@ -87,7 +91,7 @@ class Liqui {
 				method: 'POST'
 			};
 
-			var mergedOptions = Object.assign({}, options, this.options);
+			var mergedOptions = Object.assign({}, options, this.options, specificOptions);
 
 			return rp(mergedOptions).then(data => {
 				if (data.success == 1) {
@@ -142,21 +146,29 @@ class Liqui {
 		return this._query('getInfo');
 	};
 
-	buy(params){
+	buy(params, specificOptions){
+        if (!specificOptions) {
+            var specificOptions = {};
+        }
+
 		if (!params || !params.pair || !params.rate || !params.amount){
 			return Promise.reject('Pair, rate, and amount are required');
 		} else {
 			params.type = 'buy';
-			return this._query('Trade', params);
+			return this._query('Trade', params, specificOptions);
 		}
 	};
 
-	sell(params){
+	sell(params, specificOptions){
+        if (!specificOptions) {
+            var specificOptions = {};
+        }
+
 		if (!params || !params.pair || !params.rate || !params.amount){
 			return Promise.reject('Pair, rate, and amount are required');
 		} else {
 			params.type = 'sell';
-			return this._query('Trade', params);
+			return this._query('Trade', params, specificOptions);
 		}
 	};
 
