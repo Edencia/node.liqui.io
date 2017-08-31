@@ -7,11 +7,12 @@ var querystring = require('querystring');
 var util = require('util');
 
 class Liqui {
-	constructor(apiKey, apiSecret) {
+	constructor(apiKey, apiSecret, options) {
 		this.apiKey = apiKey;
 		this.apiSecret = apiSecret;
 		this.urlPost = 'https://api.liqui.io/tapi';
 		this.urlGet = 'https://api.liqui.io/api/3/';
+		this.options = options;
 
 		this.nonce = this._getTimestamp(Date.now());
 	};
@@ -37,8 +38,11 @@ class Liqui {
 			method: 'GET',
 			url: url,
 			json: true
-		}
-		return rp(options);
+		};
+
+		var mergedOptions = Object.assign({}, this.options, options);
+
+		return rp(mergedOptions);
 	};
 
 	_query(method, params) {
@@ -81,9 +85,11 @@ class Liqui {
 				json: true,
 				url: this.urlPost,
 				method: 'POST'
-			}
+			};
 
-			return rp(options).then(data => {
+			var mergedOptions = Object.assign({}, options, this.options);
+
+			return rp(mergedOptions).then(data => {
 				if (data.success == 1) {
 					return Promise.resolve(data.return);
 				} else {
