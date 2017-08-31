@@ -173,13 +173,13 @@ class Liqui {
 		});
 	};
 
-	orderInfo(params){
-		// if (typeof orderId == 'undefined'){
-		// 	return Promise.reject('Order ID is required');
-		// } else {
-		// 	let params = {
-		// 		order_id: orderId
-		// 	}
+	orderInfo(orderId){
+		if (typeof orderId == 'undefined'){
+			return Promise.reject('Order ID is required');
+		} else {
+			let params = {
+				order_id: orderId
+			}
 			return this._query('OrderInfo', params).catch(data => {
 				if ( data.success === 0 && data.error == 'invalid order'){
 					return Promise.reject('invalid order');
@@ -187,7 +187,7 @@ class Liqui {
 					return data;
 				}
 			});
-		// }
+		}
 	};
 
 	cancelOrder(orderId){
