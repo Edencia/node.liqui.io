@@ -42,7 +42,13 @@ class Liqui {
 
 		var mergedOptions = Object.assign({}, this.options, options);
 
-		return rp(mergedOptions);
+        return rp(mergedOptions).then(data => {
+			if ('success' in data && data.success === false) {
+				return Promise.reject(data);
+			}
+
+	        return Promise.resolve(data);
+		});
 	};
 
 	_query(method, params, specificOptions) {
