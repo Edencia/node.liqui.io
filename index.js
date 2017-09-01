@@ -43,7 +43,7 @@ class Liqui {
 		var mergedOptions = Object.assign({}, this.options, options);
 
         return rp(mergedOptions).then(data => {
-			if ('success' in data && data.success === false) {
+			if ('success' in data && (data.success === false || data.success === 0)) {
 				return Promise.reject(data);
 			}
 
